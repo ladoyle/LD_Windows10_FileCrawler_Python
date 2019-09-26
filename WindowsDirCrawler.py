@@ -6,6 +6,11 @@ pics_vids = ''
 pdfs = ''
 words = ''
 sheets = ''
+extensions = ['.gif', '.jpg', '.jpeg', '.png', '.bmp', '.mp4', '.mov', '.wmv', '.wma', '.pdf',
+              '.doc', '.docx', '.txt', '.xlsx']
+pic_vid_exts = ['.gif', '.jpg', '.jpeg', '.png', '.bmp', '.mp4', '.mov', '.wmv', '.wma']
+pdf_ext = '.pdf'
+text_exts = ['.doc', '.docx', '.txt']
 
 
 def organize_desktop(path):
@@ -13,24 +18,42 @@ def organize_desktop(path):
     global words
     global pdfs
     global sheets
-    os.chdir(path)
+    global extensions
+    global pic_vid_exts
+    global pdf_ext
+    global text_exts
 
     for entry in os.scandir(path=path):
         if os.path.isdir(entry):
-            if 'pics_vids' is str(entry.name):
+            if 'pics_vids' == entry.name:
                 pass
-            elif 'words' is str(entry.name):
+            elif 'words' == entry.name:
                 pass
-            elif 'pdfs' is str(entry.name):
+            elif 'pdfs' == entry.name:
                 pass
-            elif 'sheets' is str(entry.name):
+            elif 'sheets' == entry.name:
                 pass
             else:
                 organize_desktop(os.path.join(path, entry))
         else:
+            file = str(entry.name)
             src = str(os.path.join(path, entry))
-            dest = str(words) + str(entry.name)
-            os.rename(src, dest)
+            for ext in extensions:
+                if ext in file:
+                    dest = ''
+                    if ext in pic_vid_exts:
+                        print('Found a picture or movie! ' + ext)
+                        dest = str(pics_vids) + file
+                    elif ext in text_exts:
+                        print('Found a word documents ' + ext)
+                        dest = str(words) + file
+                    elif ext == pdf_ext:
+                        print('found a pdf file ' + ext)
+                        dest = str(pdfs) + file
+                    else:
+                        print('Found a spreadsheet ' + ext)
+                        dest = str(sheets) + file
+                    os.rename(src, dest)
 
 
 if __name__ == '__main__':
